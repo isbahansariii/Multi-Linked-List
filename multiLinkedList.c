@@ -1,4 +1,4 @@
-// List
+// Multi Linked List
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -68,10 +68,10 @@ void deleteCourse(int course_no)
     free(current);
 }
 
-void addStd(int courseNo, int stdID, char std_name[])
+void addStd(int course_no, int stdID, char std_name[])
 {
     struct course *currentCourse = headCourse;
-    while (currentCourse->courseNo != courseNo && currentCourse != NULL)
+    while (currentCourse->courseNo != course_no && currentCourse != NULL)
     {
         currentCourse = currentCourse->next;
     }
@@ -88,6 +88,8 @@ void addStd(int courseNo, int stdID, char std_name[])
 
     newStd->stdID = stdID;
     strcpy(newStd->stdName, std_name);
+
+    newStd->next = NULL;
 
     if (currentCourse->stdList == NULL)
     {
@@ -148,7 +150,7 @@ void removeStd(int std_ID)
 
     while (currentCourse != NULL)
     {
-        struct std *currentStd = headStd;
+        struct std *currentStd = currentCourse->stdList;
         struct std *prevStd = NULL;
         while (currentStd != NULL && currentStd->stdID != std_ID)
         {
@@ -162,8 +164,8 @@ void removeStd(int std_ID)
         }
         if (prevStd == NULL)
         {
-            headStd = headStd->next;
-            currentCourse->stdList = headStd;
+            currentCourse->stdList = currentCourse->stdList->next;
+            headStd = currentCourse->stdList;
         }
         else
         {
@@ -189,7 +191,7 @@ void display(void)
         printf("\nCourse Name: %s", currentCourse->courseName);
         printf("\nStudents Enroll: ");
 
-        struct std *currentStd = headStd;
+        struct std *currentStd = currentCourse->stdList;
         if (currentCourse->stdList == NULL)
         {
             printf("\n\tNo Student is enrolled.");
